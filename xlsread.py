@@ -6,11 +6,6 @@ import xlrd
 from calender import Calender
 import re
 
-# f=xlrd.open_workbook('刘臻辉课表.xls')
-# data=f.sheet_by_index(0)
-# for i in range(2,8):
-#     print(data.row_values(i,2))
-
 class Address:
     def __init__(self,addressname,text,length):
         self.addressName=addressname
@@ -26,6 +21,7 @@ class Address:
                 start,end=list(map(int,i.split('-')))
                 for num in range(start,end+1):
                     weekList.append(num)
+        self.weekList=weekList
 
 
 class Teacher:
@@ -45,6 +41,7 @@ class Course:
         self.teacherList=[]
         self.getName()
         self.getTeacherList()
+        self.adapter()
 
     def addTeacher(self,teacher):
         self.teacherList.append(teacher)
@@ -52,15 +49,20 @@ class Course:
     @staticmethod
     def getCourseParts(text):
         pattern='\d节</br>'
-        iter=re.finditer(pattern,text)
-        list=[]
-        start=0
-        for res in iter:
-            end=res.span()[1]
-            list.append(text[start:end])
-            start=end
-        list.append(text[start:])
-        return list
+        if re.search(pattern,text):
+            iter=re.finditer(pattern,text)
+            list=[]
+            start=0
+            for res in iter:
+                end=res.span()[1]
+                list.append(text[start:end])
+                start=end
+            list.append(text[start:])
+            return list
+        elif text:
+            return [text]
+        else:
+            return None
 
     def getName(self):
         namePt='^(.*?)</br>'
@@ -85,7 +87,6 @@ class Course:
 
         else:
             splits=self.text.split('\n')
-            print(splits[0])
             teacherName=re.search('</br>(.*)\[',splits[0])[1]
             if len(splits)>=3:
                 addressName1=re.search('周(.*?)$',splits[0])[1]
@@ -97,24 +98,29 @@ class Course:
                 teacher=Teacher(teacherName)
                 teacher.addAddress(Address(addressName1,numText1,length1))
                 teacher.addAddress(Address(addressName2,numText2,length2))
-                for i in teacher.addressList:
-                    print(i.length)
+
             else:
                 addressName=re.search('周(.*?)$',splits[0])[1]
                 numText=re.search('\[(.*)\]',splits[0])[1]
                 length=(len(re.search('第(.*)节',splits[1])[1])+1)/2
                 teacher=Teacher(teacherName)
                 teacher.addAddress(Address(addressName,numText,length))
-                print(teacher.addressList)
             self.addTeacher(teacher)
 
-    def render(self):
+    def adapter(self):
         for teacher in self.teacherList:
             for address in teacher.addressList:
-                pass
+                for week in address.weekList:
+                    Calender(week,self.day,self.start,address.length,self.name,teacher.teacherName,address.addressName)
 
-
-c='成本管理</br>郑  筠[1-8]周(三)211\n第8，9节</br>信息资源管理</br>何玉敏[9-11，13-16]周，赵吉昌[12]周</br>(一)306'
-d='信息资源管理</br>何玉敏[9-11，13-16]周，赵吉昌[12]周</br>(一)306\n第8，9节'
-a=Course(d,1,2)
-a.getTeacherList()
+if __name__ == '__main__':
+    f=xlrd.open_workbook('刘臻辉课表.xls')
+    data=f.sheet_by_index(0)
+    for i in range(2,8):
+        for j in range(2,9):
+            str=data.cell(i,j).value
+            parts=Course.getCourseParts(str)
+            if parts:
+                for x in parts:
+                    Course(x,j-1,i-1)
+    Calender.render()
