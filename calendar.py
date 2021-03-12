@@ -4,7 +4,7 @@
 
 import datetime
 
-class Calender:
+class Calendar:
     num=0
     startDay=datetime.datetime(2021,2,28)
     allCalender=[]
@@ -23,12 +23,12 @@ class Calender:
         self.course=course
         self.teacher=teacher
         self.address=address
-        self.sequence=str(Calender.num)
-        Calender.num+=1
-        Calender.allCalender.append(self)
+        self.sequence=str(Calendar.num)
+        Calendar.num+=1
+        Calendar.allCalender.append(self)
 
     @classmethod
-    def render(self):
+    def render(self,path,name):
         RENDER_TEXT=self.BEGIN_TEXT
         for calender in self.allCalender:
             RENDER_TEXT+=self.TEMPLATE
@@ -45,5 +45,5 @@ class Calender:
             RENDER_TEXT+=INSERT_TEXT
             RENDER_TEXT+='\nEND:VEVENT'
         RENDER_TEXT+=self.END_TEXT
-        with open('日历.txt','w') as f:
+        with open(path+'/'+name+'.ics','w',encoding='utf-8') as f:
             f.write(RENDER_TEXT)

@@ -5,10 +5,7 @@
 import os
 import re
 from aip import AipOcr
-
-APP_ID='23738712'
-API_KEY='SEguUZrAhOqmeRMpaqlQ3W0T'
-SECRET_KEY='RbfUzBkjbDCVMXZw9SrHafRGv4udQGHg'
+from myAPI import *
 
 client=AipOcr(APP_ID,API_KEY,SECRET_KEY)
 with open('13/25.jpg','rb') as f:

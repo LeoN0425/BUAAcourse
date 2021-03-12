@@ -1,0 +1,57 @@
+# -*- coding:utf-8 -*-
+# @Author: LeoN
+# @Time: 2021/3/12 17:15
+
+import time
+from selenium import webdriver
+from adapter import Course,Calendar
+
+class WebReader:
+    loginURL='https://sso.buaa.edu.cn/login?service=http%3A%2F%2Fjwxt.buaa.edu.cn%3A7001%2Fieas2.1%2Fwelcome%3Ffalg%3D1'
+    courseURL='http://jwxt.buaa.edu.cn:7001/ieas2.1/kbcx/queryGrkb'
+
+    def __init__(self,id,pwd,driverPath,path,name):
+        self.id=id
+        self.pwd=pwd
+        self.driver=webdriver.Chrome(driverPath)
+        self.path=path
+        self.name=name
+
+    def login(self):
+        self.driver.get(self.loginURL)
+        time.sleep(2)
+        self.driver.switch_to.frame('loginIframe')
+        inputUserName=self.driver.find_element_by_id("unPassword")
+        inputPassWord=self.driver.find_element_by_id('pwPassword')
+        button=self.driver.find_element_by_xpath('//*[@id="content-con"]/div[1]/div[7]/input')
+        inputUserName.send_keys(self.id)
+        inputPassWord.send_keys(self.pwd)
+        button.click()
+        time.sleep(1)
+        self.driver.get(self.courseURL)
+
+    def getCalendar(self):
+        template='/html/body/div[1]/div/div[8]/div[2]/table/tbody/tr['
+        for i in range(2,8):
+            for j in range(3,10):
+                xpath=template+str(i)+']/td['+str(j)+']'
+                string=self.driver.find_element_by_xpath(xpath).text
+                parts=Course.getCourseParts(string)
+                if parts:
+                    for x in parts:
+                        Course(x,j-2,i-1)
+            Calendar.render(path,name)
+
+    def run(self):
+        self.login()
+        self.getCalendar()
+        self.driver.close()
+
+if __name__ == '__main__':
+    ID=''
+    PWD=''
+    driverPath='C:/Program Files (x86)/Google/Chrome/Application/chromedriver.exe'
+    path='C:/Users/GeniusLEO/Desktop'
+    name='我的日历'
+    webReader=WebReader(ID,PWD,driverPath,path,name)
+    webReader.run()

@@ -68,14 +68,3 @@ class ImageProcess:
                     res=image.crop((lineSplit[i],colSplit[j],lineSplit[i+1]-10,colSplit[j+1]-10))
                 imageParts.append(res)
         return imageParts
-
-'''
-    思路: 由上至下, 等距取点, 有3样数据可以出现7份较好数据即可
-    化成7*6表格, 分别进行图像文本识别
-    格式:
-        课名
-        任课老师
-        周数
-        教室
-        节数
-'''
