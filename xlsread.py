@@ -6,6 +6,9 @@ import xlrd
 from adapter import Course,Calendar
 
 if __name__ == '__main__':
+    xlsname=''              #教务网导出的xls文件的路径
+    path=''                 #生成ics日历文件的所在文件夹路径
+    name=''                 #生成ics日历文件的名称
     data=xlrd.open_workbook('刘臻辉课表.xls').sheet_by_index(0)
     for i in range(2,8):
         for j in range(2,9):

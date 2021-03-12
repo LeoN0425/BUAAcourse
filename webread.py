@@ -48,10 +48,10 @@ class WebReader:
         self.driver.close()
 
 if __name__ == '__main__':
-    ID=''
-    PWD=''
-    driverPath='C:/Program Files (x86)/Google/Chrome/Application/chromedriver.exe'
-    path='C:/Users/GeniusLEO/Desktop'
-    name='我的日历'
+    ID=''                 #统一认证账号
+    PWD=''                #密码
+    driverPath=''         #'chromediver.exe'的路径
+    path=''               #生成ics日历文件的所在文件夹路径
+    name=''               #生成ics日历文件的名称
     webReader=WebReader(ID,PWD,driverPath,path,name)
     webReader.run()
