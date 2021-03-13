@@ -7,8 +7,8 @@ from selenium import webdriver
 from adapter import Course,Calendar
 
 class WebReader:
-    loginURL='https://sso.buaa.edu.cn/login?service=http%3A%2F%2Fjwxt.buaa.edu.cn%3A7001%2Fieas2.1%2Fwelcome%3Ffalg%3D1'
-    courseURL='http://jwxt.buaa.edu.cn:7001/ieas2.1/kbcx/queryGrkb'
+    loginURL='https://sso.buaa.edu.cn/login?service=http%3A%2F%2Fjwxt.buaa.edu.cn%3A8080%2Fieas2.1%2Fwelcome%3Ffalg%3D1'
+    courseURL='http://jwxt.buaa.edu.cn:8080/ieas2.1/kbcx/queryGrkb'
 
     def __init__(self,id,pwd,driverPath,path,name):
         self.id=id
