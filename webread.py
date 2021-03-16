@@ -13,7 +13,9 @@ class WebReader:
     def __init__(self,id,pwd,driverPath,path,name):
         self.id=id
         self.pwd=pwd
-        self.driver=webdriver.Chrome(driverPath)
+        chrome_options=webdriver.ChromeOptions()
+        chrome_options.add_argument('headless')
+        self.driver=webdriver.Chrome(driverPath,options=chrome_options)
         self.path=path
         self.name=name
 
@@ -50,8 +52,13 @@ class WebReader:
 if __name__ == '__main__':
     ID=''                 #统一认证账号
     PWD=''                #密码
-    driverPath=''         #'chromediver.exe'的路径
-    path=''               #生成ics日历文件的所在文件夹路径
+    driverPath=''         #chromedriver.exe的路径
+    path='.'              #生成ics日历文件的所在文件夹路径
     name=''               #生成ics日历文件的名称
     webReader=WebReader(ID,PWD,driverPath,path,name)
-    webReader.run()
+    try:
+        webReader.run()
+    except:
+        print('未能成功导入课表\n请将课表截图发送给1139378133@qq.com')
+    else:
+        print('课表已导入')
